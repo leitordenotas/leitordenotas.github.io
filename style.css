@@ -1,0 +1,23 @@
+html { font-size: 12px }
+
+.drop-files{outline: 2px dashed #92b0b3;outline-offset:-10px;padding: 20px; margin-bottom: 16px;}
+.drop-files input{display: inline-block;}
+.icon{font-size: 32px;}
+
+.pure-text-field textarea{width:100%; resize: none;height: 80px;}
+
+#loading,
+#status-wrapper,
+#to-copy-wrapper,
+#print-structure-base,
+#output-wrapper{display: none;}
+
+td,
+th{vertical-align: middle;}
+
+#login{max-width: 400px;}
+body.logged #login{display: none;}
+
+.drop-file{position: relative;}
+.drop-files:before{content: ''; background: rgba(255,255,255,0.7); position: absolute; top: 0; left: 0; right: 0; bottom: 0;}
+body.logged .drop-files:before{display: none;}

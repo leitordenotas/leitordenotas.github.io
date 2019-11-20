@@ -1,0 +1,11 @@
+{
+	"jshint.enable": true,
+	"jshint.options": {
+		"laxcomma": true
+	},
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#268d8b",
+		"titleBar.activeBackground": "#268d8b",
+		"titleBar.activeForeground": "#000"
+	}
+}

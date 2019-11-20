@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-135503494-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-135503494-1');
+	</script>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Leitor de Notas</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/solid.css" integrity="sha384-r/k8YTFqmlOaqRkZuSiE9trsrDXkh07mRaoGBMoDcmA58OHILZPsk29i2BsFng1B" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/fontawesome.css" integrity="sha384-4aon80D8rXCGx9ayDt85LbyUHeMWd3UiBaWliBlJ53yzm9hqN21A+o1pqoyK04h+" crossorigin="anonymous">
+	<link rel="stylesheet" href="style.css">
+
+	<script src="assets/jquery-3.3.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/loglevel/dist/loglevel.min.js"></script>
+	<script src="assets/jquery.ui.widget.js"></script>
+	<script src="assets/jquery.fileupload.js"></script>
+	<script src="assets/handlebars.min.js"></script>
+	<script src="assets/js.cookie.js"></script>
+	<script src="functions.js"></script>
+</head>
+<body>
+	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+		<h1 class="h3 my-0 mr-md-auto font-weight-normal">Leitor de Notas <sup><i>beta</i></sup></h1>
+		<nav class="my-2 my-md-0 mr-md-3">
+			<a class="p-2 text-dark" href="#" data-toggle="modal" data-target="#conditions-of-use-modal">Condições de uso</a>
+			<a class="p-2 text-dark" href="https://bit.ly/2WJDfFW" target="_blank"><i class="fas fa-wrench"></i> Reportar um problema</a>
+		</nav>
+		<a class="btn btn-outline-primary" href="https://bit.ly/2JVHfNM"><i class="fas fa-donate"></i> Fazer uma doação</a>
+		<!-- <a class="btn btn-outline-primary" href="#">Minha conta</a> -->
+	</div>
+
+	<div class="container-fluid">
+		<div id="loading" class="text-center fixed-top mx-auto alert alert-warning p-3 col-sm-10 col-md-2 border border-secondary rounded-bottom shadow-lg">
+			<div class="spinner-border" role="status"> <span class="sr-only">Loading...</span> </div>
+		</div>
+
+		<div id="userInfoWrapper"></div>
+
+		<div class="row m-3 p-2 bg-light rounded mx-auto text-center" id="login" style="display:none;">
+			<div class="col">
+				<h5 class="h3">Faça login</h5>
+				<form class="form" id="emailForm">
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" class="form-control form-control-lg" required="true" placeholder="examplo@email.com">
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-lg btn-block btn-primary">Entrar</button>
+					</div>
+				</form>
+				<p id="emailMsg" style="display:none;">Enviaremos um código de acesso para o SEU E-MAIL.<br>Pode ser que leve até 2 minutos para o e-mail chegar.</p>
+
+				<form class="form" id="tokenForm" style="display:none;">
+					<p>Informe no campo abaixo o código enviado em seu email.</p>
+					<div class="form-group">
+						<label for="token">Token</label>
+						<input type="tel" id="token" name="token" class="form-control form-control-lg" required="true" placeholder="000000">
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-lg btn-block btn-primary">Enviar</button>
+					</div>
+				</form>
+				<p id="tokenMsg" style="display:none;" class="display-1 text-success"><i class="fas fa-check-circle"></i></p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<div class="drop-files bg-primary">
+					<div class="text-white text-center">
+						<p class="icon">
+							<i class="fas fa-download"></i>
+						</p>
+						<p class="h4">Arraste os arquivos ou selecione abaixo: </p>
+						<input id="fileupload" type="file" name="brokerageNote" multiple>
+					</div>
+
+					<div id="status-wrapper" class="bg-light p-1 border border-secondary rounded mt-3"></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="to-copy-wrapper">
+			<div class="row">
+				<div class="col pure-text-field click-to-copy">
+					<h4>Copiar para Excel</h4>
+					<div class="form-group"><textarea class="text-to-excel form-control" readonly=1></textarea></div>
+					<button class="btn btn-primary"><i class="fas fa-copy"></i> Copiar</button>
+				</div>
+				<div class="col pure-text-field click-to-copy">
+					<h4>Copiar para dlombello®planilhas</h4>
+					<div class="form-group"><textarea class="text-to-dlombello form-control" readonly=1></textarea></div>
+					<button class="btn btn-primary"><i class="fas fa-copy"></i> Copiar</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="errors-log" style="display: none;" class="mt-3 p-3 bg-warning bg-gradient-warning">
+			<h3>Log</h3>
+		</div>
+
+		<div id="output-wrapper"></div>
+
+		<div id="print-structure-base">
+			<div class="note">
+				<hr>
+				<div class="row">
+					<div class="col-xs col-md-4">
+						<div class="note-data">
+							<h4>Dados da Nota</h4>
+							<table class="table table-sm"> <tbody></tbody> </table>
+						</div>
+						<div class="financial-summary">
+							<h4>Resumo Financeiro</h4>
+							<table class="table table-sm"> <tbody></tbody> </table>
+						</div>
+					</div>
+					<div class="col-xs col-md-8">
+						<h4>Negócios realizados </h4>
+						<table class="table table-sm table-striped trades">
+							<thead>
+								<tr>
+									<th>C/V</th>
+									<th>Tipo mercado</th>
+									<th>Prazo</th>
+									<th>Especificação do título</th>
+									<th>Obs. (*)</th>
+									<th>Quantidade</th>
+									<th>Preço / Ajuste</th>
+									<th>Valor Operação / Ajuste</th>
+									<th>D/C</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+	<div class="text-center">
+		<a href="#" class="" data-toggle="modal" data-target="#privacy-modal"> Termos de Uso e Política de Privacidade </a>
+	</div>
+
+	<div class="modal" tabindex="-1" role="dialog" id="privacy-modal">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Termos de Uso e Política de Privacidade</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<p>AO ACESSAR E UTILIZAR ESTE SERVIÇO VOCÊ ACEITA E CONCORDA COM TUDO O QUE CONSTA NESTE DOCUMENTO.</p>
+					<p>O propósito deste serviço é possibilitar que você possa fazer a leitura dos dados existentes em suas Notas de Corretagem e então copiar e utilizar em qualquer outro sistema ou planilha.</p>
+					<h6>Sobre a disponibilidade operacional do sistema</h6>
+					<p>Este é um sistema em beta, ou seja esta em desenvolvimento e não foi totalmente concluído, com isso não se pode assegurar seu perfeito funcionamento em todos os momentos. Instabilidades e indisponibilidades podem ocorrer, porém faremos sempre o máximo possível para mante-lo no ar e poder te oferecer o melhor leitor.</p>
+					<h6>Sobre a leitura das Notas de Corretagem e garantia das informações</h6>
+					<p>Este é um serviço com propósito informativo, não podemos assegurar que todas as informações da Nota de Corretagem serão lidas por completo ou com fidelidade, cabe ao usuário (ou seja, você) verificar se todas as informações foram lidas corretamente e fielmente, caso encontre informações incorretas ou incompletas ajuste-as antes de inserir em outros sistemas e/ou planilhas.</p>
+					<h6>Sobre o cálculo de taxas e impostos</h6>
+					<p>Afim de oferecer um produto ainda mais completo, nós temos a funcionalidade de cálculo de taxas e corretagem, porém esse cálculo é meramente informativo e não temos nenhuma responsabilidade sobre os resultados calculados. Para cálculo das taxas da B3 nós utilizamos as taxas oficiais que estão disponíveis no site da própria B3. Para o cálculo das taxas de corretagem fazemos apenas o rateio já que cada corretora tem suas regras específicas de cobrança e insenção da taxa de corretagem. Para ISS e IRRF nós só conseguimos obter ele caso a corretora tenha descontado diretamente na Nota de Corretagem, algumas corretoras não cobram o ISS e o IRRF na Nota de Corretagem porém descontam no extrato da conta do investidor, neste caso não temos o que fazer.</p>
+					<h6>Sobre a coleta, armazenamento e uso dos dados</h6>
+					<p>
+						Para monitorar o uso do site nós utilizamos o serviço Google Analytics, que coleta e armazena dados anônimos (ou seja, não é possível te identificar / saber quem você é) sobre a navegação dentro do site, dispositivo utilizado e outras informações relacionadas. <br>
+						Quando você envia uma Nota de Corretagem, nós fazemos a leitura dos dados em nosso sevidor e logo após isso a Nota é eliminada do sistema, ou seja, não salvamos o arquivo PDF e não mantemos nenhuma cópia de sua Nota em nosso poder. <br>
+						As únicas informações que armazenamos são o seu e-mail (utilizado para acessar o serviço), seu CPF ou CNPJ que consta na Nota de Corretagem, a data e o número da Nota de Corretagem. Todas as demais informações são exibidas a você no momento do uso e descartadas logo em seguida.
+					</p>
+					<h6>Sobre a atualização destes termos</h6>
+					<p>Estes termos podem ser atualizados a qualquer momento sem prévio aviso, cabe ao usuário sempre que acessar este site conferir se houve alguma mudança antes de utilizar o serviço de envio e leitura das notas.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" tabindex="-1" role="dialog" id="conditions-of-use-modal">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Condições de uso</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+				</div>
+				<div class="modal-body">
+					<div class="bg-warning p-3 mb-3 rounded">
+						<p>Durante o período de testes, estamos liberando acesso ao sistema para todos os usuários até <b>20 mil reais em operações mensais</b>.</p>
+						<p>Quem usar, gostar do sistema e quiser fazer uma doação de incentivo e manutenção do projeto durante o período de testes, segue link abaixo.</p>
+						<p><a href="https://bit.ly/2JVHfNM" targe="_blank">https://bit.ly/2JVHfNM</a></p>
+						<p>Após o prazo de testes, apenas os usuários devidamente cadastrados e com planos ativos terão aceso. Caso tenha interesse em continuar a utilizar o sistema após esse período, escolha um de nossos planos.</p>
+					</div>
+					
+					<h6>Plano ( Gratuito )</h6>
+					<ul>
+						<li>Limite de volume de operações de 5 mil reais mensais.</li>
+						<li>Leitura de notas com CPF do titular</li>
+					</ul>
+					
+					<h6>Plano Mensal ( R$ 4,99 )</h6>
+					<ul>
+						<li>Volume mensal de operações ilimitado.</li>
+					</ul>
+					
+					<h6>Plano Anual ( R$ 49,90 )</h6>
+					<ul>
+						<li>Volume mensal de operações ilimitado.</li>
+						<li>2 meses grátis por ano</li>
+					</ul>
+					
+					<h6>Plano Empresarial ( consulte )</h6>
+					<ul>
+						<li>Volume mensal de operações ilimitado.</li>
+						<li>Leitura de notas com CPF/CNPJ do titular e terceiros</li>
+					</ul>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" tabindex="-1" role="dialog" id="update-user">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Dados do usuário</h5>
+				</div>
+				<div class="modal-body">
+					<p>Olá, para continuar utilizando o sistema é necessário que você informe o CPF. Lembre-se que este será o mesmo CPF no qual as suas notas devem ser enviadas.</p>
+					<form class="form" id="userUpdateForm">
+						<div class="form-group">
+							<label for="userDoc">CPF <i>(somente números)</i></label>
+							<input type="tel" id="userDoc" name="userDoc" class="form-control form-control-lg" required="true" placeholder="CPF (somente números)" pattern="[0-9]{11}">
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-lg btn-block btn-primary">Salvar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/x-handlebars-template" id="userInfo">
+		<div class="text-center"><p>E-mail: {{email}} | CPF: {{userDoc}}</p></div>
+	</script>
+
+	<script type="text/x-handlebars-template" id="errorsLog">
+		<ul class="list-group">
+			{{#each items}}
+				<li class="list-group-item list-group-item-warning">
+					Página: <strong>{{_page}}</strong> | Arquivo: {{fileName}}<br/>
+					{{#each _messages}}
+						<span style="display: block">- {{this}}</span>
+					{{/each}}
+				</li>
+			{{/each}}
+		</ul>
+	</script>
+
+	<script type="text/x-handlebars-template" id="trades">
+		{{#each trades}}
+			<tr>
+				<td>{{ BS }}</td>
+				<td>{{ marketType }}</td>
+				<td>{{ time }}</td>
+				<td>{{ securities }} {{#if originalSecurities}}({{originalSecurities}}){{/if}}</td>
+				<td>{{ obs }}</td>
+				<td>{{ numberFormatBr0 quantity }}</td>
+				<td>{{ numberFormatBr price }}</td>
+				<td>{{ numberFormatBr itemTotal }}</td>
+				<td>{{ DC }}</td>
+			</tr>
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="brokerageNote">
+		<tr> <td>Nr. nota</td>			<td>{{ number }}</td></tr>
+		<tr> <td>Data pregão</td>		<td>{{ date }}</td></tr>
+		<tr> <td>Corretora</td>			<td>{{ broker }}</td></tr>
+		<tr> <td>CPF/CNPJ</td>			<td>{{ cpf }}</td></tr>
+		<tr> <td>Nome do arquivo</td>	<td>{{ fileName }}</td></tr>
+		<tr> <td>Prova real</td>		<td>{{#if proofIsValid}}Válida{{else}}Inválida{{/if}}</td></tr>
+	</script>
+
+	<script type="text/x-handlebars-template" id="tax">
+		<tr><td>Valor líquido das operações</td>	<td>{{ numberFormatBr netAmount }}</td></tr>
+		<tr><td>Taxa de liquidação</td>				<td>{{ numberFormatBr settlementTax }}</td></tr>
+		<tr><td>Taxa de Registro</td>				<td>{{ numberFormatBr registrationTax }}</td></tr>
+		<tr><td>Taxa de termo/opções</td>			<td>{{ numberFormatBr optionsTax }}</td></tr>
+		<tr><td>Taxa A.N.A</td>						<td>{{ numberFormatBr ANATax }}</td></tr>
+		<tr><td>Emolumentos</td>					<td>{{ numberFormatBr emolument }}</td></tr>
+		<tr><td>Total Bovespa / Soma</td>			<td>{{ numberFormatBr bovespaTotal }}</td></tr>
+		<tr><td>Corretagem</td>						<td>{{ numberFormatBr clearing }}</td></tr>
+		<tr><td>Impostos / ISS</td>					<td>{{ numberFormatBr ISSTax }}</td></tr>
+		<tr><td>I.R.R.F.</td>						<td>{{ numberFormatBr IRRF }}</td></tr>
+		<tr><td>Outras Bovespa</td>					<td>{{ numberFormatBr bovespaOthers }}</td></tr>
+		<tr><td>Total corretagem/Despesas</td>		<td>{{ numberFormatBr brokerageTax }}</td></tr>
+		<tr><td>Líquido D+x</td>					<td>{{ numberFormatBr futureNetAmount }}</td></tr>
+	</script>
+
+	<script type="text/x-handlebars-template" id="textToDlombello">
+		{{#each textTrades}}{{ securities }}	{{ date }}	{{ operationType }}	{{ numberFormatBr0 quantity }}	{{ numberFormatBr price }}	{{ numberFormatBr tax }}	{{ brokerage }}	{{numberFormatBr IR}}
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="textToExcel">
+		{{#each textTrades}}{{BS}}	{{marketType}}	{{time}}	{{securities}}	{{obs}}	{{numberFormatBr0 quantity}}	{{numberFormatBr price}}	{{numberFormatBr itemTotal}}	{{DC}}	{{type}}	{{brokerage}}	{{noteNumber}}	{{ date }}	{{numberFormatBr netAmount}}	{{numberFormatBr settlementTax}}	{{numberFormatBr registrationTax}}	{{numberFormatBr CBLC}}	{{numberFormatBr optionsTax}}	{{numberFormatBr ANATax}}	{{numberFormatBr emolument}}	{{numberFormatBr bovespaTotal}}	{{numberFormatBr clearing}}	{{numberFormatBr ISSTax}}	{{numberFormatBr IRRF}}	{{numberFormatBr bovespaOthers}}	{{numberFormatBr brokerageTax}}	{{numberFormatBr futureNetAmount}}
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="file">
+		<span class="badge badge-secondary ml-1 mb-1" data-name="{{ fileName }}">{{ fileName }}</span>
+	</script>
+</body>
+</html>
