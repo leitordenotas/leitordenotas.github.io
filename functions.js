@@ -104,6 +104,7 @@ var Main = {
 		});
 	},
 	secRegex: /^([A-Z0-9]{4}[0-9]{1,2})(F|B)?/,
+	secRegex2: /([A-Z0-9]{4}[0-9]{1,2})(F|B)?/,
 	fRegex: /F$/,
 	opcaoRegex: /([a-z0-9]+).*/i,
 	uploadCallback: function() {
@@ -153,8 +154,10 @@ var Main = {
 					note.trades[t].securities = note.trades[t].securities.replace(Main.opcaoRegex, '$1');
 					continue;
 				}
+				else if(note.type == "BMF")
+					continue;
 				// Convertendo o nome dos papeis
-				else if(note.broker == 'Rico' || note.bConf == 'Rico'){
+				else if(note.bConf == 'Rico'){
 					temp = null;
 
 					for(s in Main.dlombelloDB.stocks){
@@ -192,7 +195,11 @@ var Main = {
 				}
 				// Pegando o código do papel no caso das corretoras que trazem
 				else{
-					temp = sec.replace(/\s/g, '').match(Main.secRegex);
+					if(note.bConf == 'Easynvest')
+						temp = sec.match(Main.secRegex2);
+					else
+						temp = sec.replace(/\s/g, '').match(Main.secRegex);
+					
 					if(temp){
 						note.trades[t].originalSecurities = note.trades[t].securities;
 						note.trades[t].securities = temp[1].trim().replace(Main.fRegex, '');
@@ -273,7 +280,7 @@ var Main = {
 				itemTotal: 0,
 				securities: TT.securities, // Cód. do Ativo
 				date: TT.date, // Data da Transação
-				operationType: TT.obs == 'D'? 'DT': '', // Tipo de Operação
+				operationType: (TT.obs == 'D' || TT.obs == 'DAY TRADE')? 'DT': '', // Tipo de Operação
 				quantity: 0, // Quantidade
 				price: TT.price, // Preço/ Ajuste
 				brokerage: TT.brokerage // Corretora
