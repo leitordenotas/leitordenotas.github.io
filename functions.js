@@ -135,7 +135,7 @@ var Main = {
 				errorsLog.push(note);
 				note.errorsLog = true;
 			}
-			if(!note._noteReadCompletely)
+			if( !(note._noteReadCompletely && note.trades && note.trades.length) )
 				continue;
 
 			myWrapper = base.children().clone().appendTo(wrapper);
