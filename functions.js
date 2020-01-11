@@ -280,7 +280,7 @@ var Main = {
 				itemTotal: 0,
 				securities: TT.securities, // Cód. do Ativo
 				date: TT.date, // Data da Transação
-				operationType: (['D', 'D#', 'DAY TRADE'].indexOf(TT.obs) > -1)? 'DT': '', // Tipo de Operação
+				operationType: (['D', 'D#', 'D#2', 'DAY TRADE'].indexOf(TT.obs) > -1)? 'DT': '', // Tipo de Operação
 				quantity: 0, // Quantidade
 				price: TT.price, // Preço/ Ajuste
 				brokerage: TT.brokerage // Corretora
