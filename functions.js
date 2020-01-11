@@ -163,7 +163,7 @@ var Main = {
 					for(s in Main.dlombelloDB.stocks){
 						if(sec.indexOf(s) == 0){ // Buscando pelo nome do pregão
 							temp = Main.dlombelloDB.stocks[s][0];
-							log.info('Encontrei ❝' + sec + '❞ (' + temp + ') buscando pelo nome do pregão');
+							log.info('🔎 Encontrei ❝' + sec + '❞ (' + temp + ') buscando pelo nome do pregão');
 							break;
 						}
 						else if(sec.indexOf( Main.dlombelloDB.stocks[s][2].substring(0, 12) ) == 0){ // buscando pela razão social
@@ -172,7 +172,7 @@ var Main = {
 								for(st in stockType){
 									if(sec.indexOf(st) > 0){
 										temp = temp[0].substring(0, 4) + stockType[st];
-										log.info('Encontrei ❝' + sec + '❞ (' + temp + ') buscando pela razão social');
+										log.info('🔍 Encontrei ❝' + sec + '❞ (' + temp + ') buscando pela razão social');
 										break;
 									}
 								}
@@ -184,13 +184,13 @@ var Main = {
 					}
 
 					if(temp){
-						log.info('❝' + sec + '❞ será convertido para ❝' + temp + '❞');
+						log.info('🔄 ❝' + sec + '❞ será convertido para ❝' + temp + '❞');
 						note.trades[t].originalSecurities = note.trades[t].securities;
 						note.trades[t].securities = temp;
 					}
 					else{
 						note._error = true;
-						note._messages.push('Ativo não convertido: ❝' + note.trades[t].securities + '❞');
+						note._messages.push('✖️ Ativo não convertido: ❝' + note.trades[t].securities + '❞');
 					}
 				}
 				// Pegando o código do papel no caso das corretoras que trazem
@@ -275,6 +275,7 @@ var Main = {
 		for(var i = 0; i < textTrades.length; i++){
 			TT = textTrades[i];
 			TGId = TT.marketType + TT.BS + TT.securities + TT.price + TT.obs;
+			// log.info({ TGId: TGId, textTrade: TT });
 			
 			tradesGrouped[TGId] = tradesGrouped[TGId] || {
 				itemTotal: 0,
@@ -295,7 +296,7 @@ var Main = {
 		var c = 0;
 		var taxVol = 0;
 		var noteTax = note.settlementTax + note.registrationTax + note.bovespaTotal + note.clearing + note.bovespaOthers + (note.ISSTax < 0? note.ISSTax: 0);
-		noteTax = noteTax * -1;
+		noteTax = Math.abs(noteTax);
 		for(var g in tradesGrouped){
 			c++;
 			// ignoro o cálculo da taxa para o primeiro item
@@ -308,6 +309,7 @@ var Main = {
 			TG.tax = Math.round( (TG.itemTotal * noteTax / tradesVol) * 100 ) / 100;
 			taxVol += TG.tax;
 		}
+		log.info({ 'Custo total da nota': noteTax, 'Custo dos itens somados, exceto o 1º': taxVol });
 		tradesGrouped[tgFirst].tax = Math.round( (noteTax - taxVol) * 100 ) / 100;
 
 		// Colocando dos dados da nota no primeiro item negociado
