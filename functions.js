@@ -63,12 +63,13 @@ var Main = {
 	dlombelloDB:{
 		parse: function() {
 			$.ajax({
-				url: 'https://sistema.dlombelloplanilhas.com/ativos.php?key=196132',
+				url: 'https://sistema.dlombelloplanilhas.com/ativos_leitor.php?key=6E6oLX2xhPhnzzrsTAIc',
 				dataType: 'json'
 			})
 			.fail(function() {
-				alert('Erro ao obter os códigos dos ativos do Banco de Dados, por favor recarregue a página.');
-				location.reload(true);
+				// alert('Erro ao obter os códigos dos ativos do Banco de Dados, por favor recarregue a página.');
+				// location.reload(true);
+				console.log('error', arguments);
 			})
 			.done(function(data) {
 				var stocks = {};
