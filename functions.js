@@ -1,7 +1,7 @@
 var Main = {
 	run: function(params) {
 		log.setLevel('trace');
-		
+
 		Main.serverUrl();
 		Main.sessionToken = Cookies.get('bggg-session');
 		Main.dlombelloDB.parse();
@@ -45,7 +45,7 @@ var Main = {
 		$('#userUpdateForm').submit(function(e) {
 			e.preventDefault();
 			var $t = $(this);
-			
+
 			$.ajax({
 				url: Main.server + 'pvt/user/me',
 				contentType: "application/json",
@@ -67,9 +67,8 @@ var Main = {
 				dataType: 'json'
 			})
 			.fail(function() {
-				// alert('Erro ao obter os códigos dos ativos do Banco de Dados, por favor recarregue a página.');
-				// location.reload(true);
-				console.log('error', arguments);
+				alert('Erro ao obter os códigos dos ativos do Banco de Dados, por favor recarregue a página.');
+				location.reload(true);
 			})
 			.done(function(data) {
 				var stocks = {};
@@ -200,7 +199,7 @@ var Main = {
 						temp = sec.match(Main.secRegex2);
 					else
 						temp = sec.replace(/\s/g, '').match(Main.secRegex);
-					
+
 					if(temp){
 						note.trades[t].originalSecurities = note.trades[t].securities;
 						note.trades[t].securities = temp[1].trim().replace(Main.fRegex, '');
@@ -277,7 +276,7 @@ var Main = {
 			TT = textTrades[i];
 			TGId = TT.marketType + TT.BS + TT.securities + TT.price + TT.obs;
 			// log.info({ TGId: TGId, textTrade: TT });
-			
+
 			tradesGrouped[TGId] = tradesGrouped[TGId] || {
 				itemTotal: 0,
 				securities: TT.securities, // Cód. do Ativo
@@ -296,7 +295,8 @@ var Main = {
 		var TG, tgFirst;
 		var c = 0;
 		var taxVol = 0;
-		var noteTax = note.settlementTax + note.registrationTax + note.bovespaTotal + note.clearing + note.bovespaOthers + (note.ISSTax < 0? note.ISSTax: 0);
+		var noteTax = note.allFees + (note.ISSTax < 0? note.ISSTax: 0);
+
 		noteTax = Math.abs(noteTax);
 		for(var g in tradesGrouped){
 			c++;
@@ -305,7 +305,7 @@ var Main = {
 				tgFirst = g;
 				continue;
 			}
-			
+
 			TG = tradesGrouped[g];
 			TG.tax = Math.round( (TG.itemTotal * noteTax / tradesVol) * 100 ) / 100;
 			taxVol += TG.tax;
@@ -373,7 +373,7 @@ var Main = {
 
 		wrapper.find('#emailForm').submit(function(e) {
 			e.preventDefault();
-			
+
 			$.ajax({
 				url: Main.server + 'login',
 				contentType: "application/json",
@@ -395,7 +395,7 @@ var Main = {
 
 		wrapper.find('#tokenForm').submit(function(e) {
 			e.preventDefault();
-			
+
 			$.ajax({
 				url: Main.server + 'token',
 				data: JSON.stringify({ token: wrapper.find('#token').val().trim() }),
