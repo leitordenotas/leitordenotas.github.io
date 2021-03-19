@@ -36,9 +36,10 @@ Veja a lista de corretoras que já oferecemos suporte para a leitura de notas de
 -   Warren Corretora
 
 ## Sobre este repositório
-Este repositório contém apenas o código fonte da interface.
-O back-end e o front-end são totalmente separados e individualizados.
-O código do servidor (back-end) não é público e não esta disponível no Github.
+- Este repositório contém apenas o código fonte da interface.
+- O back-end e o front-end são totalmente separados e individualizados.
+- O código do servidor (back-end) não é público e não esta disponível no Github.
+
 Esta branch `master` contém o código do site pós processado pelo Angular CLI, para ver o código fonte original, você deve acessar a branch `dev` ([ver branch dev](/leitordenotas/leitordenotas.github.io/tree/dev)).
 
 ## Como contribuir com o projeto
