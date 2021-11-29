@@ -15,7 +15,7 @@ var Main = {
             provider = 'microsoft';
 
         $.ajax({
-            url: 'https://leitordenotas2.herokuapp.com/oauth/' + provider + '/callback' + qs,
+            url: 'https://leitordenotas3.herokuapp.com/oauth/' + provider + '/callback' + qs,
             contentType: "application/json",
             type: 'POST'
         }).fail(function () {
