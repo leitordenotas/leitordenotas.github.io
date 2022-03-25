@@ -21,10 +21,8 @@ var Main = {
         }).fail(function () {
             alert('❌ Erro inesperado!');
         }).done(function (data) {
-            Cookies.set('bggg-session', data.session, {
-                path: '/',
-                expires: 14
-            });
+            localStorage.setItem('bgggSessionId', data.session);
+            localStorage.setItem('bgggSessionExpires', (Date.now() + 1000 * 60 * 60 * 24 * 14).toString());
             location.href = '/';
         });
     }

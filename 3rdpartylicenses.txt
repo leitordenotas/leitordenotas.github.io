@@ -569,9 +569,6 @@ MIT
 ngx-bootstrap/utils
 MIT
 
-ngx-cookie-service
-MIT
-
 ngx-mask
 MIT
 MIT License
