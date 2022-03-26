@@ -23,7 +23,14 @@ var Main = {
         }).done(function (data) {
             localStorage.setItem('bgggSessionId', data.session);
             localStorage.setItem('bgggSessionExpires', (Date.now() + 1000 * 60 * 60 * 24 * 14).toString());
-            location.href = '/';
+
+            if (localStorage.getItem('bgggSessionIframe') === 'yes') {
+                localStorage.removeItem('bgggSessionIframe');
+                alert('✅ Sucesso! Você já pode fechar esta aba.');
+                window.close();
+            }
+            else
+                location.href = '/';
         });
     }
 };
