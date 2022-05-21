@@ -9,31 +9,39 @@ Ao enviar sua nota em PDF o nosso sistema a converterá para texto e com isso vo
 Além da funcionalidade básica de exportar para Excel, o sistema também é 100% compatível com a  [Planilha de Controle de Ações Dlombello](https://www.dlombelloplanilhas.com).
 
 Veja a lista de corretoras que já oferecemos suporte para a leitura de notas de corretagem:
--   Ágora Corretora
--   Banco do Brasil Investimentos
--   Banco Inter Corretora
--   Banco Itaú
--   BTG Pactual Corretora
--   C6 Bank
--   CEF Caixa Econômica Federal Corretora
--   Clear Corretora
--   CM Capital
--   Easynvest Corretora
--   Genial Investimentos Corretora
--   Guide Corretora
--   Mirae Corretora
--   Modal Corretora
--   ModalMais Corretora
--   Necton
--   Nova Futura
--   Órama Corretora
--   Rico Corretora
--   Socopa Corretora
--   Terra Investimentos Corretora
--   Toro Corretora
--   Vitreo Corretora
--   XP Corretora
--   Warren Corretora
+
+| Corretora                             | Mercado à Vista | Mercado Futuro |
+|---------------------------------------|-----------------|----------------|
+| Ágora Corretora                       | ✔️              |                |
+| Ativa Investimentos                   | ✔️              |                |
+| Avenue (EUA)                          | ✔️              |                |
+| Banco do Brasil Investimentos         | ✔️              |                |
+| Banco Inter Corretora                 | ✔️              | ✔️             |
+| Banco Itaú                            | ✔️              |                |
+| BTG Pactual Corretora                 | ✔️              | ✔️             |
+| C6 Bank                               | ✔️              |                |
+| CEF Caixa Econômica Federal Corretora | ✔️              |                |
+| Clear Corretora                       | ✔️              | ✔️             |
+| CM Capital                            | ✔️              | ✔️             |
+| NuInvest / Easynvest Corretora        | ✔️              | ✔️             |
+| Genial Investimentos Corretora        | ✔️              | ✔️             |
+| Guide Corretora                       | ✔️              |                |
+| Kirton Corretora                      | ✔️              |                |
+| Mirae Corretora                       | ✔️              | ✔️             |
+| Modal Corretora                       | ✔️              | ✔️             |
+| ModalMais Corretora                   | ✔️              |                |
+| MyCAP                                 | ✔️              |                |
+| Necton                                | ✔️              |                |
+| Nova Futura                           | ✔️              | ✔️             |
+| Órama Corretora                       | ✔️              | ✔️             |
+| Rico Corretora                        | ✔️              | ✔️             |
+| Santander Corretora                   | ✔️              |                |
+| Singulare / Socopa Corretora          | ✔️              |                |
+| Terra Investimentos Corretora         | ✔️              | ✔️             |
+| Toro Corretora                        | ✔️              | ✔️             |
+| Vitreo Corretora                      | ✔️              |                |
+| Warren Corretora                      | ✔️              | ✔️             |
+| XP Corretora                          | ✔️              | ✔️             |
 
 ## Sobre este repositório
 - Este repositório contém apenas o código fonte da interface.
