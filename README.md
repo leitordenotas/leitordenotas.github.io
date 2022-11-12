@@ -14,6 +14,7 @@ Veja a lista de corretoras que já oferecemos suporte para a leitura de notas de
 |---------------------------------------|-----------------|----------------|
 | Ágora Corretora                       | ✔️              |                |
 | Ativa Investimentos                   | ✔️              |                |
+| Apex (EUA)                            | ✔️              |                |
 | Avenue (EUA)                          | ✔️              |                |
 | Banco do Brasil Investimentos         | ✔️              |                |
 | Banco Inter Corretora                 | ✔️              | ✔️             |
