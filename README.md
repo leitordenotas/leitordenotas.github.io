@@ -38,6 +38,7 @@ Veja a lista de corretoras que já oferecemos suporte para a leitura de notas de
 | Rico Corretora                        | ✔️              | ✔️             |
 | Santander Corretora                   | ✔️              |                |
 | Singulare / Socopa Corretora          | ✔️              |                |
+| Tastyworks (EUA)                      | ✔️              |                |
 | Terra Investimentos Corretora         | ✔️              | ✔️             |
 | Toro Corretora                        | ✔️              | ✔️             |
 | Vitreo Corretora                      | ✔️              |                |
